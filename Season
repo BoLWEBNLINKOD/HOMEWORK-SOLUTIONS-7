@@ -1,0 +1,51 @@
+import java.util.*;
+
+public class Season implements Iterable<Episode> {
+    private final List<Episode> episodes = new ArrayList<>();
+
+    public void addEpisode(Episode e) {
+        episodes.add(e);
+    }
+
+    public EpisodeIterator normalIterator() {
+        return new SeasonIterator();
+    }
+
+    public EpisodeIterator reverseIterator() {
+        return new ReverseSeasonIterator();
+    }
+
+    public EpisodeIterator shuffleIterator(long seed) {
+        return new ShuffleSeasonIterator(seed);
+    }
+
+    @Override
+    public Iterator<Episode> iterator() {
+        return episodes.iterator();
+    }
+
+    private class SeasonIterator implements EpisodeIterator {
+        private int index = 0;
+        public boolean hasNext() { return index < episodes.size(); }
+        public Episode next() { return episodes.get(index++); }
+    }
+
+    private class ReverseSeasonIterator implements EpisodeIterator {
+        private int index = episodes.size() - 1;
+        public boolean hasNext() { return index >= 0; }
+        public Episode next() { return episodes.get(index--); }
+    }
+
+    private class ShuffleSeasonIterator implements EpisodeIterator {
+        private final List<Episode> shuffled;
+        private int index = 0;
+
+        public ShuffleSeasonIterator(long seed) {
+            shuffled = new ArrayList<>(episodes);
+            Collections.shuffle(shuffled, new Random(seed));
+        }
+
+        public boolean hasNext() { return index < shuffled.size(); }
+        public Episode next() { return shuffled.get(index++); }
+    }
+}
