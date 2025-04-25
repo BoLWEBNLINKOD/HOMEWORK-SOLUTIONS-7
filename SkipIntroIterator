@@ -1,0 +1,19 @@
+import java.util.Iterator;
+
+public class SkipIntroIterator implements Iterator<EpisodeView> {
+    private final EpisodeIterator inner;
+    private final int skipSec;
+
+    public SkipIntroIterator(EpisodeIterator inner, int skipSec) {
+        this.inner = inner;
+        this.skipSec = skipSec;
+    }
+
+    public boolean hasNext() {
+        return inner.hasNext();
+    }
+
+    public EpisodeView next() {
+        return new EpisodeView(inner.next(), skipSec);
+    }
+}
