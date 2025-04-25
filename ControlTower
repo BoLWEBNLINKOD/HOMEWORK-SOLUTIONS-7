@@ -1,0 +1,43 @@
+import java.util.*;
+
+public class ControlTower implements TowerMediator {
+    private final Queue<Aircraft> landingQueue = new LinkedList<>();
+    private final Queue<Aircraft> takeOffQueue = new LinkedList<>();
+    private final List<Aircraft> aircrafts = new ArrayList<>();
+    private boolean runwayOccupied = false;
+
+    public void register(Aircraft a) {
+        aircrafts.add(a);
+    }
+
+    public synchronized void broadcast(String msg, Aircraft sender) {
+        if ("MAYDAY".equalsIgnoreCase(msg)) {
+            System.out.println("Emergency from " + sender.getId() + "!");
+            landingQueue.remove(sender);
+            ((LinkedList<Aircraft>) landingQueue).addFirst(sender);
+            notifyAllPlanes("EMERGENCY: " + sender.getId() + " landing now. Hold position.");
+            runwayOccupied = false;
+            requestRunway(sender);
+        } else {
+            notifyAllPlanes(sender.getId() + " says: " + msg);
+        }
+    }
+
+    public synchronized boolean requestRunway(Aircraft a) {
+        if (!runwayOccupied) {
+            runwayOccupied = true;
+            System.out.println("Runway granted to " + a.getId());
+            return true;
+        } else {
+            landingQueue.add(a);
+            System.out.println(a.getId() + " added to landing queue.");
+            return false;
+        }
+    }
+
+    private void notifyAllPlanes(String msg) {
+        for (Aircraft a : aircrafts) {
+            a.receive(msg);
+        }
+    }
+}
