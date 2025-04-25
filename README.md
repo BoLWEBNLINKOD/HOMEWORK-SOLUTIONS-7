@@ -38,3 +38,7 @@ PassengerPlane PX101 received: EMERGENCY: HX777 landing now. Hold position.
 CargoPlane CX999 received: EMERGENCY: HX777 landing now. Hold position.
 Helicopter HX777 received: EMERGENCY: HX777 landing now. Hold position.
 Runway granted to HX777
+Сначала выводятся названия эпизодов в трёх режимах: обычный, обратный и перемешанный (с постоянным seed, так что всегда один и тот же порядок).
+Затем происходит имитация коммуникации с башней:
+Самолёт PX101 запрашивает посадку и получает полосу. CX999 попадает в очередь. HX777 отправляет MAYDAY, диспетчер очищает полосу, уведомляет всех и даёт HX777 посадку вне очереди.
+Этот пример показывает что проигрыватель работает нормально так как надо и перебирает эпизоды без проблем 
