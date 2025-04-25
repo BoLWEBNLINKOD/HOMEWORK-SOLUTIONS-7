@@ -1,0 +1,29 @@
+import java.util.*;
+
+public class Series {
+    private final List<Season> seasons = new ArrayList<>();
+
+    public void addSeason(Season s) {
+        seasons.add(s);
+    }
+
+    public EpisodeIterator bingeIterator() {
+        return new BingeIterator();
+    }
+
+    private class BingeIterator implements EpisodeIterator {
+        private int seasonIndex = 0;
+        private EpisodeIterator currentIterator = null;
+
+        public boolean hasNext() {
+            while ((currentIterator == null || !currentIterator.hasNext()) && seasonIndex < seasons.size()) {
+                currentIterator = seasons.get(seasonIndex++).normalIterator();
+            }
+            return currentIterator != null && currentIterator.hasNext();
+        }
+
+        public Episode next() {
+            return currentIterator.next();
+        }
+    }
+}
